@@ -1,0 +1,115 @@
+﻿@import url(../../Fonts/font.css);
+.Booking-Main-Body
+{
+    position:absolute;
+    width:100%;
+    top:220px;
+   
+   
+}
+.custom-container {
+    min-height : 800px;
+    background-color: #F5F7F9;
+    
+}
+.custom-paper
+{
+    margin-top:10px;
+    border-radius:6px;
+}
+.filter_header {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    border-bottom: 2px solid #EFEFEF;
+}
+.filter_header_left
+{
+    font-size:13px;
+    font-weight:500;
+    font-family:Inter;
+}
+.filter_header_right {
+    font-size: 15px;
+    color: #70B3EF;
+    font-weight: 600;
+    font-family: Inter;
+}
+.filter-main 
+{
+    padding:15px;
+}
+.filter-main-header
+{
+    font-family:Inter;
+    font-size:15px;
+    font-weight:500;
+    text-align:left;
+    margin-bottom:10px;
+}
+.time-line {
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #EFEFEF;
+    border-radius:8px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    font-family:Inter;
+}
+.filter-icon
+{
+    margin-bottom:10px;
+}
+.time-line:hover 
+{
+    cursor:pointer;
+}
+.filter-time
+{
+    font-weight:600;
+    color:black;
+}
+.filter-time-detail
+{
+    font-size:14px;
+    font-weight:normal;
+    color:#6E7985;
+}
+.m-top-10
+{
+    margin-top:10px;
+}
+.RangeSlider-Wrapper
+{
+    max-width:80%;
+   margin:auto;
+    
+}
+.min-price, .max-price {
+    background-color: #fff;
+    border: 1px solid #EFEFEF;
+    border-radius: 8px;
+    font-family:Inter;
+} 
+.max-price > p {
+        padding: 8px;
+        font-size: 12px;
+        color: #333;
+        margin-bottom:0;
+        margin-left:2px;
+    }
+ .min-price > p {
+        padding: 8px;
+        font-size: 12px;
+        color: #333;
+        margin-bottom: 0;
+        margin-left: 2px;
+    }
+.max-price-value, .min-price-value
+{
+    display:flex;
+    justify-content:flex-start;
+    max-width:70%;
+}

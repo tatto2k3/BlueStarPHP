@@ -1,0 +1,27 @@
+.payment-input-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.payment-label {
+    font-size: 14px;
+    font-family: Inter;
+    font-weight: 500;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+.payment-input {
+    padding: 6px 10px;
+    outline: none;
+    border: 1px solid #efefef;
+    border-radius: 10px;
+}
+.Previous_button
+{
+
+}
+.Countine_button
+{
+
+}
