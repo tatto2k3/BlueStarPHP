@@ -91,5 +91,27 @@ class CustomerController extends Controller
         }
     }
 
+    function searchCustomers(Request $request)
+    {
+        try {
+            $searchKeyword = $request->input('searchKeyword');
+
+            if (empty($searchKeyword)) {
+                return response()->json(['error' => 'Invalid search keyword'], 400);
+            }
+
+            // Search customers by name containing the provided keyword
+            $searchResults = Customer::where('FULLNAME', 'like', '%' . $searchKeyword . '%')
+                ->orWhere('NUM_ID', 'like', '%' . $searchKeyword . '%')
+                ->orWhere('C_ID', 'like', '%' . $searchKeyword . '%')
+                ->get();
+
+            return response()->json($searchResults);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => 'Internal server error: ' . $ex->getMessage()], 500);
+        }
+    }
+
+
 
 }

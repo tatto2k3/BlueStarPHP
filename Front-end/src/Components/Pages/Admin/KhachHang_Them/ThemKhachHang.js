@@ -9,6 +9,7 @@ const ThemKhachHang = () => {
     const [fullname, setTenKhachHang] = useState("");
     const [point, setDiemTichLuy] = useState("");
     const [email, setEmail] = useState("");
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     const handleSave = async () => {
         if (!isValidData()) {
@@ -37,8 +38,13 @@ const ThemKhachHang = () => {
                 alert("Failed to add customer");
                 return;
             }
-
-            alert("Customer added successfully");
+            setShowSuccessMessage(true);
+                setMaKhachHang("");
+                setCCCD("");
+                setTenKhachHang("");
+                setDiemTichLuy("");
+                setEmail("");
+                setTimeout(() => setShowSuccessMessage(false), 3000);
         } catch (error) {
             console.error("Error:", error);
         }
@@ -52,6 +58,11 @@ const ThemKhachHang = () => {
 
     return (
         <div className="container-fluid">
+            {showSuccessMessage && (
+                <div className="alert alert-success mt-3" role="alert">
+                    Thêm khách hàng thành công!
+                </div>
+            )}
             <div className="logo-container">
                 <div className="logo-inner">
                     <img src={logo2} alt="Logo" className="logo-img" />

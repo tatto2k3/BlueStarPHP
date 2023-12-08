@@ -14,6 +14,7 @@ const ThemVe = () => {
     const [ticketPrice, setTicketPrice] = useState("");
     const [mail, setMail] = useState("");
     const [disId, setDisId] = useState("");
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     const handleSave = async () => {
         if (!isValidData()) {
@@ -22,19 +23,19 @@ const ThemVe = () => {
         }
 
         const ticketData = {
-            tId: tId,
-            cccd: cccd,
-            name: name,
-            flyId: flyId,  
-            kgId: kgId,
-            seatId: seatId,
-            foodId: foodId,
-            ticketPrice: ticketPrice,
-            mail: mail,
-            disId: disId,
+            T_ID: tId,
+            CCCD: cccd,
+            Name: name,
+            Fly_ID: flyId,  
+            Kg_ID: kgId,
+            Seat_ID: seatId,
+            Food_ID: foodId,
+            Ticket_Price: ticketPrice,
+            Mail: mail,
+            Dis_ID: disId,
         };
         try {
-        const ticketResponse = await fetch("api/ticket/AddTicket", {
+        const ticketResponse = await fetch("http://localhost:8000/api/ticket/addTicket", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -47,8 +48,18 @@ const ThemVe = () => {
                 alert("Failed to add Ticket");
                 return;
             }
-
-            alert("Ticket added successfully");
+            setShowSuccessMessage(true);
+            setTId("");
+            setCccd("");
+            setName("");
+            setFlyId("");
+            setKgId("");
+            setSeatId("");
+            setFoodId("");
+            setTicketPrice("");
+            setMail("");
+            setDisId("");
+            setTimeout(() => setShowSuccessMessage(false), 3000);
         } catch (error) {
             console.error("Error:", error);
         }
@@ -62,6 +73,11 @@ const ThemVe = () => {
 
     return (
         <div className="container-fluid">
+            {showSuccessMessage && (
+                <div className="alert alert-success mt-3" role="alert">
+                    Thêm vé thành công!
+                </div>
+            )}
             <div className="logo-container">
                 <div className="logo-inner">
                     <img src={logo2} alt="Logo" className="logo-img" />
@@ -70,7 +86,7 @@ const ThemVe = () => {
             </div>
 
             <div className="head-name">
-                <h2>Thêm khách hàng</h2>
+                <h2>Thêm vé</h2>
             </div>
 
             <div className="infor-cn">

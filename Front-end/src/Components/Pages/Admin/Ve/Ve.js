@@ -7,10 +7,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Ve = () => {
     const [tickets, setTickets] = useState([]);
+    const [searchKeyword, setSearchKeyword] = useState('');
     const [selectedTickets, setSelectedTickets] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(8);
     const navigate = useNavigate();
+    const [showConfirmation, setShowConfirmation] = useState(false);
+
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -19,29 +22,15 @@ const Ve = () => {
     const paginate = pageNumber => setCurrentPage(pageNumber);
 
     const handleClick = () => {
-        navigate('/KhachHang_Them');
+        navigate('/Ve_Them');
     };
-
-    useEffect(() => {
-        fetch("api/ticket/GetTickets")
-            .then(response => response.json())
-            .then(responseJson => {
-                console.log(responseJson);
-                setTickets(responseJson);
-            })
-            .catch(error => {
-                console.error("Error fetching data:", error);
-            });
-    }, [])
-
-
 
 
     useEffect(() => {
         // Lấy danh sách khách hàng từ API hoặc nguồn dữ liệu khác
         const fetchData = async () => {
             try {
-                const response = await fetch("/api/ticket/GetTickets");
+                const response = await fetch("http://localhost:8000/api/ticket/getTickets");
                 const data = await response.json();
                 setTickets(data);
             } catch (error) {
@@ -68,7 +57,7 @@ const Ve = () => {
     const handleShowInfo = async () => {
         try {
             if (selectedTickets.length > 0) {
-                const response = await fetch(`/api/ticket/GetTicketDetails?cIds=${selectedTickets.join(',')}`);
+                const response = await fetch(`http://localhost:8000/api/ticket/getTicketDetails?tIds=${selectedTickets.join(',')}`);
                 const data = await response.json();
 
                 // Chuyển hướng sang trang sửa khách hàng và truyền thông tin khách hàng
@@ -81,10 +70,18 @@ const Ve = () => {
         }
     };
 
+    const divHandleDelete = () => {
+        if (selectedTickets.length > 0) {
+            setShowConfirmation(true);
+        } else {
+            toast.warning('No customers selected for deletion');
+        }
+    };
+
     const handleDelete = async () => {
-        if (window.confirm("Are you sure to delete this Ticket")) {
+        setShowConfirmation(false);
             try {
-                const response = await axios.delete('http://localhost:44430/api/ticket', {
+                const response = await axios.delete(`http://localhost:8000/api/ticket/deleteTicket/${selectedTickets.join(',')}`, {
                     data: selectedTickets, // Pass the array as data
                     headers: {
                         'Content-Type': 'application/json',
@@ -92,7 +89,7 @@ const Ve = () => {
                 });
 
                 if (response.status === 200) {
-                    const updatedTickets = tickets.filter(ticket => !selectedTickets.includes(ticket.cId));
+                    const updatedTickets = tickets.filter(ticket => !selectedTickets.includes(ticket.T_ID));
 
                     // Cập nhật state để tái render bảng
                     setTickets(updatedTickets);
@@ -107,11 +104,39 @@ const Ve = () => {
             } catch (error) {
                 toast.error('Error deleting Tickets: ' + error.message);
             }
+        
+    };
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
+
+    const handleSearch = async () => {
+        if (searchKeyword != "") {
+            try {
+                const response = await fetch(`http://localhost:8000/api/ticket/searchTickets?searchKeyword=${searchKeyword}`);
+                const data = await response.json();
+                setTickets(data);
+            } catch (error) {
+                console.error("Error searching tickets:", error);
+            }
+        }
+        else {
+            try {
+                const response = await fetch("http://localhost:8000/api/ticket/getTickets");
+                const data = await response.json();
+                setTickets(data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
         }
     };
     return (
-        <div className="col-md-10 main">
-        <div className="container mt-md-6">
+        <div className="col-md-12 main">
+        <div className="mt-md-6">
           <div className="navbar d-flex justify-content-between align-items-center">
             <h2 className="main-name mb-0">Thông tin vé</h2>
             {/* Actions: Đổi mật khẩu và Xem thêm thông tin */}
@@ -131,7 +156,13 @@ const Ve = () => {
             <div className="d-flex w-100 justify-content-start align-items-center">
               <i className="bi bi-search" />
               <span className="first">
-                <input className="form-control" placeholder="Tìm kiếm ..." />
+              <input
+            className="form-control"
+            placeholder="Tìm kiếm ..."
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+            onKeyDown={handleKeyPress}
+        />
               </span>
               <span className="second">Filters <i className="bi bi-chevron-compact-down" /></span>
             </div>
@@ -140,48 +171,55 @@ const Ve = () => {
             <thead>
               <tr>
                 <th />
-                <th>T_ID</th>
+                <th>Mã vé</th>
                 <th>CCCD</th>
-                <th>Name</th>
-                <th>Fly_ID</th>
-                <th>Kg_ID</th>
-                <th>Seat_ID</th>
-                <th>Food_ID</th>
-                <th>Ticket_Price</th>
+                <th>Tên</th>
+                <th>Mã chuyến bay</th>
+                <th>Mã hành lý</th>
+                <th>Mã ghế</th>
+                <th>Mã thức ăn</th>
+                <th>Giá vé</th>
                 <th>Mail</th>
-                <th>Dis_ID</th>
+                <th>Mã khuyến mãi</th>
               </tr>
             </thead>
                     <tbody>
                         {currentItems.map((item) => (
-                            <tr key={item.cId}>
+                            <tr key={item.T_ID}>
                                 <td contentEditable="true" className="choose">
                                     <input
                                         className="form-check-input"
                                         type="checkbox"
-                                        onChange={() => handleCheckboxChange(item.cId)}
-                                        checked={selectedTickets.includes(item.cId)}
+                                        onChange={() => handleCheckboxChange(item.T_ID)}
+                                        checked={selectedTickets.includes(item.T_ID)}
                                     />
                                 </td>
-                                <td>{item.tId}</td>
-                                <td>{item.cccd}</td>
-                                <td>{item.name}</td>
-                                <td>{item.flyId}</td>
-                                <td>{item.kgId}</td>
-                                <td>{item.seatId}</td>
-                                <td>{item.foodId}</td>
-                                <td>{item.ticketPrice}</td>
-                                <td>{item.mail}</td>
-                                <td>{item.disId}</td>
+                                <td>{item.T_ID}</td>
+                                <td>{item.CCCD}</td>
+                                <td>{item.Name}</td>
+                                <td>{item.Fly_ID}</td>
+                                <td>{item.Kg_ID}</td>
+                                <td>{item.Seat_ID}</td>
+                                <td>{item.Food_ID}</td>
+                                <td>{item.Ticket_Price}</td>
+                                <td>{item.Mail}</td>
+                                <td>{item.Dis_ID}</td>
                             </tr>
                         ))}
               
             </tbody>
           </table>
+          {showConfirmation && (
+    <div className="confirmation-dialog">
+        <p>Bạn chắc chắn muốn xóa vé?</p>
+        <button className="yes" onClick={handleDelete}>Có</button>
+        <button className="no" onClick={() => setShowConfirmation(false)}>Không</button>
+    </div>
+)}
           {/*3 nut bam*/}
                 <div className="d-flex justify-content-end my-3">
                     <button className="btn btn-primary mr-2" id="btnThem" onClick={handleClick}>Thêm</button>
-                    <button className="btn btn-danger mr-2" id="btnXoa" onClick={handleDelete}>Xóa</button>
+                    <button className="btn btn-danger mr-2" id="btnXoa" onClick={divHandleDelete}>Xóa</button>
                     <button className="btn btn-warning" id="btnSua" onClick={handleShowInfo}>Sửa</button>
           </div>
                 <ul className="pagination justify-content-center">

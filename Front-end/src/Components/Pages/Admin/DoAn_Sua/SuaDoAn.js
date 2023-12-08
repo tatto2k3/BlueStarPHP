@@ -8,6 +8,7 @@ import axios from 'axios';
 const SuaDoAn = () => {
     const location = useLocation();
     const [selectedFoodInfo, setSelectedFoodInfo] = useState(location.state?.selectedFoodInfo || []);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     useEffect(() => {
         console.log("Selected Food info in SuaKhachHang useEffect:", selectedFoodInfo);
@@ -24,9 +25,9 @@ const SuaDoAn = () => {
         if (selectedFoodInfo.length > 0) {
             // Nếu có thông tin khách hàng được chọn, cập nhật FoodInfo
             setFoodInfo({
-                fId: selectedFoodInfo[0]?.fId || '',
-                fName: selectedFoodInfo[0]?.fName || '',
-                fPrice: selectedFoodInfo[0]?.fPrice || ''
+                fId: selectedFoodInfo[0]?.F_ID || '',
+                fName: selectedFoodInfo[0]?.F_NAME || '',
+                fPrice: selectedFoodInfo[0]?.F_PRICE || ''
 
             });
         }
@@ -48,25 +49,25 @@ const SuaDoAn = () => {
         event.preventDefault();
         try {
 
-            if (!foodInfo || !foodInfo.maKhachHang) {
+            if (!foodInfo || !foodInfo.fId) {
                 alert("Thức ăn không được tìm thấy");
                 return;
             }
 
             const updatedData = {
-                fId: foodInfo.fId,
-                fName: foodInfo.fName,
-                fPrice: foodInfo.fPrice
+                F_ID: foodInfo.fId,
+                F_NAME: foodInfo.fName,
+                F_PRICE: foodInfo.fPrice
             };
 
 
-            if (!updatedData.fId) {
+            if (!updatedData.F_ID) {
                 alert("FId là bắt buộc");
                 return;
             }
 
             // Sử dụng fetch để thực hiện yêu cầu PUT
-            const response = await fetch('api/food/UpdateFood', {
+            const response = await fetch('http://localhost:8000/api/food/updateFood', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -80,7 +81,8 @@ const SuaDoAn = () => {
                 throw new Error(JSON.stringify(errorMessage));
             }
 
-            alert("Thức ăn đã được cập nhật");
+            setShowSuccessMessage(true);
+            setTimeout(() => setShowSuccessMessage(false), 3000);
 
         } catch (err) {
             // Xử lý lỗi
@@ -90,6 +92,11 @@ const SuaDoAn = () => {
 
     return (
         <div className="container-fluid">
+            {showSuccessMessage && (
+                <div className="alert alert-success mt-3" role="alert">
+                    Sửa món ăn thành công!
+                </div>
+            )}
             <div className="logo-container">
                 <div className="logo-inner">
                     <img src={logo2} alt="Logo" className="logo-img" />
@@ -98,7 +105,7 @@ const SuaDoAn = () => {
             </div>
 
             <div className="head-name">
-                <h2>Thêm thông tin thức ăn</h2>
+                <h2>Sửa thông tin thức ăn</h2>
             </div>
 
             <div className="infor-cn">

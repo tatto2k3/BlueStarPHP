@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import logo2 from '../../../../assets/logo2.PNG';
 
 const ThemChuyenBay = () => {
-    const [flyId, setflyId] = useState("");
+    const [flyId, setFlyId] = useState("");
     const [plId, setPlId] = useState("");
     const [fromLocation, setFromLocation] = useState("");
     const [toLocation, setToLocation] = useState("");
@@ -20,17 +20,17 @@ const ThemChuyenBay = () => {
         }
 
         const flightData = {
-            flyId: "C21",
-            plId: "32423467",
-            fromLocation: "ngo tat to",
-            toLocation: null,  
-            departureTime: "",
-            arrivalTime: "",
-            departureDay: "",
-            originalPrice: "",
+            flyId: flyId ,
+            plId: plId,
+            fromLocation: fromLocation ,
+            toLocation: toLocation,  
+            departureTime: departureTime,
+            arrivalTime: arrivalTime,
+            departureDay: departureDay,
+            originalPrice: originalPrice,
         };
         try {
-        const flightResponse = await fetch("api/customer/AddFlight", {
+        const flightResponse = await fetch("api/customer/AddChuyenbay", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -80,7 +80,7 @@ const ThemChuyenBay = () => {
                                 id="maChuyenBay"
                                 placeholder="Mã chuyến bay"
                                 value={flyId}
-                                onChange={(e) => setPlId(e.target.value)}
+                                onChange={(e) => setFlyId(e.target.value)}
                             />
                         </div>
                         <div className="col-4">
@@ -132,7 +132,7 @@ const ThemChuyenBay = () => {
                         <div className="col-4">
                             <label htmlFor="arrivalTime" className="form-label">Giờ đến</label>
                             <input
-                                type="number"
+                                type="text"
                                 className="form-control"
                                 id="arrivalTime"
                                 placeholder="Giờ đến"
@@ -145,7 +145,7 @@ const ThemChuyenBay = () => {
                         <div className="col-6">
                             <label htmlFor="departureDay" className="form-label">Ngày đi</label>
                             <input
-                                type="text"
+                                type="date"
                                 className="form-control"
                                 id="departureDay"
                                 placeholder="Ngày đi"
@@ -156,12 +156,12 @@ const ThemChuyenBay = () => {
                         <div className="col-6">
                             <label htmlFor="originalPrice" className="form-label">Giá vé</label>
                             <input
-                                type="text"
+                                type="number"
                                 className="form-control"
                                 id="originalPrice"
-                                placeholder="Giờ đi"
-                                value={departureTime}
-                                onChange={(e) => setDepartureTime(e.target.value)}
+                                placeholder="Giá vé"
+                                value={originalPrice}
+                                onChange={(e) => setOriginalPrice(e.target.value)}
                             />
                         </div>
                         

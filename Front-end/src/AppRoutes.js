@@ -22,8 +22,14 @@ import Explore from "./Components/Pages/Explore/explore";
 import Personal from "./Components/Pages/Personal/Personal";
 import Refund from "./Components/Pages/Refund/Refund";
 import KhachHang from "./Components/Pages/Admin/KhachHang/KhachHang";
+import ThemKhachHang from "./Components/Pages/Admin/KhachHang_Them/ThemKhachHang";
+import SuaKhachHang from "./Components/Pages/Admin/KhachHang_Sua/SuaKhachHang";
 import ChuyenBay from "./Components/Pages/Admin/ChuyenBay/ChuyenBay";
+import ThemChuyenBay from "./Components/Pages/Admin/ChuyenBay_Them/ThemChuyenBay";
+import SuaChuyenBay from "./Components/Pages/Admin/ChuyenBay_Sua/SuaChuyenBay";
 import SanBay from "./Components/Pages/Admin/SanBay/SanBay";
+import ThemSanBay from "./Components/Pages/Admin/SanBay_Them/ThemSanBay";
+import SuaSanBay from "./Components/Pages/Admin/SanBay_Sua/SuaSanBay";
 import Sidebar from "./Components/Layouts/Sidebar/Sidebar";
 import MatKhau from "./Components/Pages/Admin/MatKhau/MatKhau";
 import NhanVien from "./Components/Pages/Admin/NhanVien/NhanVien";
@@ -33,11 +39,17 @@ import MayBay from "./Components/Pages/Admin/MayBay/MayBay";
 import ThemMayBay from "./Components/Pages/Admin/MayBay_Them/ThemMayBay";
 import SuaMayBay from "./Components/Pages/Admin/MayBay_Sua/SuaMayBay";
 import HanhLy from "./Components/Pages/Admin/HanhLy/HanhLy";
+import ThemHanhLy from "./Components/Pages/Admin/HanhLy_Them/ThemHanhLy";
+import SuaHanhLy from "./Components/Pages/Admin/HanhLy_Sua/SuaHanhLy";
 import Ve from "./Components/Pages/Admin/Ve/Ve";
-import ThemKhachHang from "./Components/Pages/Admin/KhachHang_Them/ThemKhachHang";
-import SuaKhachHang from "./Components/Pages/Admin/KhachHang_Sua/SuaKhachHang";
-import ThemChuyenBay from "./Components/Pages/Admin/ChuyenBay_Them/ThemChuyenBay";
-import SuaChuyenBay from "./Components/Pages/Admin/ChuyenBay_Sua/SuaChuyenBay";
+import Ve_Them from "./Components/Pages/Admin/Ve_Them/ThemVe";
+import Ve_Sua from "./Components/Pages/Admin/Ve_Sua/SuaVe";
+import DoAn from "./Components/Pages/Admin/DoAn/DoAn";
+import DoAn_Them from "./Components/Pages/Admin/DoAn_Them/ThemDoAn";
+import DoAn_Sua from "./Components/Pages/Admin/DoAn_Sua/SuaDoAn";
+import MaGiamGia from "./Components/Pages/Admin/MaGiamGia/MaGiamGia";
+import MaGiamGia_Them from "./Components/Pages/Admin/MaGiamGia_Them/ThemMaGiamGia";
+import MaGiamGia_Sua from "./Components/Pages/Admin/MaGiamGia_Sua/SuaMaGiamGia";
 import AdminLayout from "./Components/Layouts/AdminLayout/AdminLayout";
 
 const AppRoutes = [
@@ -143,9 +155,29 @@ const AppRoutes = [
         layout: Sidebar
     },
     {
+        path: '/ChuyenBay_Them',
+        element: ThemChuyenBay,
+        layout: AdminLayout
+    },
+    {
+        path: '/ChuyenBay_Sua',
+        element: SuaChuyenBay,
+        layout: AdminLayout
+    },
+    {
         path: '/SanBay',
         element: SanBay,
         layout: Sidebar
+    },
+    {
+        path: '/SanBay_Them',
+        element: ThemSanBay,
+        layout: AdminLayout
+    },
+    {
+        path: '/SanBay_Sua',
+        element: SuaSanBay,
+        layout: AdminLayout
     },
 
     {
@@ -174,6 +206,46 @@ const AppRoutes = [
         layout: Sidebar
     },
     {
+        path: '/Ve_Them',
+        element: Ve_Them,
+        layout: AdminLayout
+    },
+    {
+        path: '/Ve_Sua',
+        element: Ve_Sua,
+        layout: AdminLayout
+    },
+    {
+        path: '/MaGiamGia',
+        element: MaGiamGia,
+        layout: Sidebar
+    },
+    {
+        path: '/MaGiamGia_Them',
+        element: MaGiamGia_Them,
+        layout: AdminLayout
+    },
+    {
+        path: '/MaGiamGia_Sua',
+        element: MaGiamGia_Sua,
+        layout: AdminLayout
+    },
+    {
+        path: '/DoAn',
+        element: DoAn,
+        layout: Sidebar
+    },
+    {
+        path: '/DoAn_Them',
+        element: DoAn_Them,
+        layout: AdminLayout
+    },
+    {
+        path: '/DoAn_Sua',
+        element: DoAn_Sua,
+        layout: AdminLayout
+    },
+    {
         path: '/MayBay',
         element: MayBay,
         layout: Sidebar
@@ -182,6 +254,16 @@ const AppRoutes = [
         path: '/HanhLy',
         element: HanhLy,
         layout: Sidebar
+    },
+    {
+        path: '/HanhLy_Them',
+        element: ThemHanhLy,
+        layout: AdminLayout
+    },
+    {
+        path: '/HanhLy_Sua',
+        element: SuaHanhLy,
+        layout: AdminLayout
     },
     {
         path: '/KhachHang_Them',

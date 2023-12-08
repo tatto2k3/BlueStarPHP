@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from "react";
-import './SuaKhachHang.css';
+import './SuaMaGiamGia.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import logo2 from '../../../../assets/logo2.PNG';
 import { useLocation } from 'react-router-dom';
@@ -7,43 +7,43 @@ import axios from 'axios';
 
 
 
-const SuaKhachHang = () => {
+const SuaMaGiamGia = () => {
     const location = useLocation();
-    const [selectedCustomerInfo, setSelectedCustomerInfo] = useState(location.state?.selectedCustomerInfo || []);
+    const [selectedDiscountInfo, setSelectedDiscountInfo] = useState(location.state?.selectedDiscountInfo || []);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     useEffect(() => {
-        console.log("Selected customer info in SuaKhachHang useEffect:", selectedCustomerInfo);
-        // Các thao tác khác với selectedCustomerInfo
-    }, [selectedCustomerInfo]);
+        console.log("Selected discount info in SuaKhachHang useEffect:", selectedDiscountInfo);
+        // Các thao tác khác với selecteddiscountInfo
+    }, [selectedDiscountInfo]);
 
-    const [customerInfo, setCustomerInfo] = useState({
-        maKhachHang: '',
-        tenKhachHang: '',
-        CCCD: '',
-        email: '',
-        diemTichLuy: 2
+    const [discountInfo, setDiscountInfo] = useState({
+        dId: '',
+        dName: '',
+        dStart: '',
+        dFinish: '',
+        dPercent: 0
     });
 
     useEffect(() => {
-        if (selectedCustomerInfo.length > 0) {
-            // Nếu có thông tin khách hàng được chọn, cập nhật customerInfo
-            setCustomerInfo({
-                maKhachHang: selectedCustomerInfo[0]?.C_ID || '',
-                tenKhachHang: selectedCustomerInfo[0]?.FULLNAME || '',
-                CCCD: selectedCustomerInfo[0]?.NUM_ID || '',
-                email: selectedCustomerInfo[0]?.MAIL || '',
-                diemTichLuy: selectedCustomerInfo[0]?.POINT || 0
+        if (selectedDiscountInfo.length > 0) {
+            // Nếu có thông tin khách hàng được chọn, cập nhật discountInfo
+            setDiscountInfo({
+                dId: selectedDiscountInfo[0]?.D_ID || '',
+                dName: selectedDiscountInfo[0]?.D_NAME || '',
+                dStart: selectedDiscountInfo[0]?.D_START || '',
+                dFinish: selectedDiscountInfo[0]?.D_FINISH || '',
+                dPercent: selectedDiscountInfo[0]?.D_PERCENT || 0
             });
         }
-    }, [selectedCustomerInfo]);
+    }, [selectedDiscountInfo]);
 
 
     const handleChange = (e) => {
         const { id, value } = e.target;
 
-        setCustomerInfo({
-            ...customerInfo,
+        setDiscountInfo({
+            ...discountInfo,
             [id]: value,
         });
     };
@@ -53,28 +53,28 @@ const SuaKhachHang = () => {
     const handleSave = async function update(event) {
         event.preventDefault();
         try {
-           
-            if (!customerInfo || !customerInfo.maKhachHang) {
-                alert("Khách hàng không được tìm thấy");
+
+            if (!discountInfo || !discountInfo.dId) {
+                alert("Khuyến mãi không được tìm thấy");
                 return;
             }
 
             const updatedData = {
-                C_ID: customerInfo.maKhachHang,
-                FULLNAME: customerInfo.tenKhachHang,
-                MAIL: customerInfo.email,
-                POINT: customerInfo.diemTichLuy,
-                NUM_ID: customerInfo.CCCD
+                D_ID: discountInfo.dId,
+                D_NAME: discountInfo.dName,
+                D_START: discountInfo.dStart,
+                D_FINISH: discountInfo.dFinish,
+                D_PERCENT: discountInfo.dPercent
             };
 
           
-            if (!updatedData.C_ID) {
-                alert("CId là bắt buộc");
+            if (!updatedData.D_ID) {
+                alert("DId là bắt buộc");
                 return;
             }
 
             // Sử dụng fetch để thực hiện yêu cầu PUT
-            const response = await fetch('http://localhost:8000/api/customer/updateCustomer', {
+            const response = await fetch('http://localhost:8000/api/discount/updateDiscount', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -90,6 +90,7 @@ const SuaKhachHang = () => {
 
             setShowSuccessMessage(true);
             setTimeout(() => setShowSuccessMessage(false), 3000);
+
         } catch (err) {
             // Xử lý lỗi
             alert(err.message);
@@ -113,68 +114,67 @@ const SuaKhachHang = () => {
             </div>
 
             <div className="head-name">
-                <h2>Sửa thông tin khách hàng</h2>
+                <h2>Sửa thông tin khuyến mãi</h2>
             </div>
 
             <div className="infor-cn">
                 <form className="form-signin-cn">
                     <div className="row mb-3">
                         <div className="col-4">
-                            <label htmlFor="maKhachHang" className="form-label">Mã khách hàng</label>
-                            <input                             
+                            <label htmlFor="dId" className="form-label">Mã khuyến mãi</label>
+                            <input
                                 type="text"
                                 className="form-control"
-                                id="maKhachHang"
-                                placeholder="Mã khách hàng"
-                                value={customerInfo.maKhachHang}
+                                id="dId"
+                                placeholder="Mã khuyến mãi"
+                                value={discountInfo.dId}
                                 onChange={handleChange}
                                 readOnly
                             />
                         </div>
                         <div className="col-4">
-                            <label htmlFor="tenKhachHang" className="form-label">Tên khách hàng</label>
+                            <label htmlFor="dName" className="form-label">Tên khuyến mãi</label>
                             <input
                                 type="text"
                                 className="form-control"
-                                id="tenKhachHang"
-                                placeholder="Tên khách hàng"
-                                value={customerInfo.tenKhachHang}
+                                id="dName"
+                                placeholder="Tên khuyến mãi"
+                                value={discountInfo.dName}
                                 onChange={handleChange}
-                                
                             />
                         </div>
                         <div className="col-4">
-                            <label htmlFor="CCCD" className="form-label">CCCD</label>
+                            <label htmlFor="dStart" className="form-label">Ngày bắt đầu</label>
                             <input
                                 type="text"
                                 className="form-control"
-                                id="CCCD"
-                                placeholder="CCCD"
-                                value={customerInfo.CCCD}
+                                id="dStart"
+                                placeholder="Ngày bắt đầu"
+                                value={discountInfo.dStart}
                                 onChange={handleChange}
                             />
                         </div>
                     </div>
                     <div className="row mb-3">
                         <div className="col-6">
-                            <label htmlFor="email" className="form-label">Email</label>
+                            <label htmlFor="dFinish" className="form-label">Ngày kết thúc</label>
                             <input
                                 type="text"
                                 className="form-control"
-                                id="email"
-                                placeholder="Email"
-                                value={customerInfo.email}
+                                id="dFinish"
+                                placeholder="Ngày kết thúc"
+                                value={discountInfo.dFinish}
                                 onChange={handleChange}
                             />
                         </div>
                         <div className="col-6">
-                            <label htmlFor="diemTichLuy" className="form-label">Điểm tích lũy</label>
+                            <label htmlFor="dPercent" className="form-label">Phần trăm</label>
                             <input
                                 type="number"
                                 className="form-control"
-                                id="diemTichLuy"
-                                placeholder="Điểm tích lũy"
-                                value={customerInfo.diemTichLuy}
+                                id="dPercent"
+                                placeholder="Phần trăm"
+                                value={discountInfo.dPercent}
                                 onChange={handleChange}
                             />
                         </div>
@@ -185,10 +185,10 @@ const SuaKhachHang = () => {
                 </form>
             </div>
             <div className="back">
-                <a href="./KhachHang" className="text-decoration-underline-mk">Quay lại trang dành cho khách hàng</a>
+                <a href="./MaGiamGia" className="text-decoration-underline-mk">Quay lại trang dành cho khuyến mãi</a>
             </div>
         </div>
     );
 }
 
-export default SuaKhachHang;
+export default SuaMaGiamGia;

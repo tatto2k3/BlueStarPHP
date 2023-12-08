@@ -161,3 +161,9 @@ h2 {
 .form-check-input {
     margin: 0;
 }
+.table th:nth-child(1) {
+    width: 40px;
+}
+.table th:nth-child(2) {
+    width: 100px;
+}

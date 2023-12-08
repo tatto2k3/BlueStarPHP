@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 const SuaHanhLy = () => {
     const location = useLocation();
     const [selectedLuggageInfo, setSelectedLuggageInfo] = useState(location.state?.selectedLuggageInfo || []);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     useEffect(() => {
         console.log("Selected Luggage info in SuaKhachHang useEffect:", selectedLuggageInfo);
@@ -23,9 +24,9 @@ const SuaHanhLy = () => {
         if (selectedLuggageInfo.length > 0) {
             // Nếu có thông tin khách hàng được chọn, cập nhật LuggageInfo
             setLuggageInfo({
-                luggageCode: selectedLuggageInfo[0]?.luggageCode || '',
-                mass: selectedLuggageInfo[0]?.mass || '',
-                price: selectedLuggageInfo[0]?.price || '',
+                luggageCode: selectedLuggageInfo[0]?.LUGGAGE_CODE || '',
+                mass: selectedLuggageInfo[0]?.MASS || '',
+                price: selectedLuggageInfo[0]?.PRICE || '',
             });
         }
     }, [selectedLuggageInfo]);
@@ -52,19 +53,19 @@ const SuaHanhLy = () => {
             }
 
             const updatedData = {
-                luggageCode: luggageInfo.luggageCode,
-                mass: luggageInfo.mass,
-                price: luggageInfo.price,
+                LUGGAGE_CODE: luggageInfo.luggageCode,
+                MASS: luggageInfo.mass,
+                PRICE: luggageInfo.price,
             };
 
 
-            if (!updatedData.luggageCode) {
+            if (!updatedData.LUGGAGE_CODE) {
                 alert("LuggageCode là bắt buộc");
                 return;
             }
 
             // Sử dụng fetch để thực hiện yêu cầu PUT
-            const response = await fetch('api/luggage/UpdateLuggage', {
+            const response = await fetch('http://localhost:8000/api/luggage/updateLuggage', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -77,9 +78,8 @@ const SuaHanhLy = () => {
                 const errorMessage = await response.text();
                 throw new Error(JSON.stringify(errorMessage));
             }
-
-            alert("Hành lý đã được cập nhật");
-
+            setShowSuccessMessage(true);
+            setTimeout(() => setShowSuccessMessage(false), 3000);
         } catch (err) {
             // Xử lý lỗi
             alert(err.message);
@@ -88,6 +88,11 @@ const SuaHanhLy = () => {
 
     return (
         <div className="container-fluid">
+            {showSuccessMessage && (
+                <div className="alert alert-success mt-3" role="alert">
+                    Sửa hành lý thành công!
+                </div>
+            )}
             <div className="logo-container">
                 <div className="logo-inner">
                     <img src={logo2} alt="Logo" className="logo-img" />

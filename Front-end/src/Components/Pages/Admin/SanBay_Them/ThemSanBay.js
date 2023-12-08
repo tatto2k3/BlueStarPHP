@@ -7,6 +7,7 @@ const ThemSanBay = () => {
     const [airportId, setAirportId] = useState("");
     const [airportName, setAirportName] = useState("");
     const [place, setPlace] = useState("");
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     const handleSave = async () => {
         if (!isValidData()) {
@@ -15,12 +16,12 @@ const ThemSanBay = () => {
         }
 
         const sanbayData = {
-            airportId: airportId,
+            airportID: airportId,
             airportName: airportName,
             place: place,
         };
         try {
-            const sanbayResponse = await fetch("api/sanbay/AddSanbay", {
+            const sanbayResponse = await fetch("http://localhost:8000/api/sanbay/addSanbay", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -33,8 +34,11 @@ const ThemSanBay = () => {
                 alert("Failed to add sanbay");
                 return;
             }
-
-            alert("Sanbay added successfully");
+            setShowSuccessMessage(true);
+            setAirportId("");
+            setAirportName("");
+            setPlace("");
+            setTimeout(() => setShowSuccessMessage(false), 3000);
         } catch (error) {
             console.error("Error:", error);
         }
@@ -47,6 +51,11 @@ const ThemSanBay = () => {
     };
     return (
         <div className="container-fluid">
+            {showSuccessMessage && (
+                <div className="alert alert-success mt-3" role="alert">
+                    Thêm sân bay thành công!
+                </div>
+            )}
             <div className="logo-container">
                 <div className="logo-inner">
                     <img src={logo2} alt="Logo" className="logo-img" />

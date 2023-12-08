@@ -8,6 +8,7 @@ import axios from 'axios';
 const SuaVe = () => {
     const location = useLocation();
     const [selectedTicketInfo, setSelectedTicketInfo] = useState(location.state?.selectedTicketInfo || []);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     useEffect(() => {
         console.log("Selected Ticket info in SuaKhachHang useEffect:", selectedTicketInfo);
@@ -31,16 +32,16 @@ const SuaVe = () => {
         if (selectedTicketInfo.length > 0) {
             // Nếu có thông tin khách hàng được chọn, cập nhật TicketInfo
             setTicketInfo({
-                tId: selectedTicketInfo[0]?.tId || '',
-                cccd: selectedTicketInfo[0]?.cccd || '',
-                name: selectedTicketInfo[0]?.name || '',
-                flyId: selectedTicketInfo[0]?.flyId || '',
-                kgId: selectedTicketInfo[0]?.kgId || 0,
-                seatId: selectedTicketInfo[0]?.seatId || '',
-                foodId: selectedTicketInfo[0]?.foodId || '',
-                ticketPrice: selectedTicketInfo[0]?.ticketPrice || '',
-                mail: selectedTicketInfo[0]?.mail || '',
-                disId: selectedTicketInfo[0]?.disId || 0
+                tId: selectedTicketInfo[0]?.T_ID || '',
+                cccd: selectedTicketInfo[0]?.CCCD || '',
+                name: selectedTicketInfo[0]?.Name || '',
+                flyId: selectedTicketInfo[0]?.Fly_ID || '',
+                kgId: selectedTicketInfo[0]?.Kg_ID || '',
+                seatId: selectedTicketInfo[0]?.Seat_ID || '',
+                foodId: selectedTicketInfo[0]?.Food_ID || '',
+                ticketPrice: selectedTicketInfo[0]?.Ticket_Price || 0,
+                mail: selectedTicketInfo[0]?.Mail || '',
+                disId: selectedTicketInfo[0]?.Dis_ID || ''
             });
         }
     }, [selectedTicketInfo]);
@@ -61,27 +62,32 @@ const SuaVe = () => {
         event.preventDefault();
         try {
 
-            if (!ticketInfo || !ticketInfo.maKhachHang) {
+            if (!ticketInfo || !ticketInfo.tId) {
                 alert("Vé không được tìm thấy");
                 return;
             }
 
             const updatedData = {
-                cId: ticketInfo.maKhachHang,
-                Fullname: ticketInfo.tenKhachHang,
-                Mail: ticketInfo.email,
-                Point: ticketInfo.diemTichLuy,
-                NumId: ticketInfo.CCCD
+                T_ID: ticketInfo.tId,
+                CCCD: ticketInfo.cccd,
+                Name: ticketInfo.name,
+                Fly_ID: ticketInfo.flyId,
+                Kg_ID: ticketInfo.kgId,
+                Food_ID: ticketInfo.foodId,
+                Seat_ID: ticketInfo.seatId,
+                Mail: ticketInfo.mail,
+                Ticket_Price: ticketInfo.ticketPrice,
+                Dis_ID: ticketInfo.disId
             };
 
 
-            if (!updatedData.tId) {
-                alert("CId là bắt buộc");
+            if (!updatedData.T_ID) {
+                alert("TId là bắt buộc");
                 return;
             }
 
             // Sử dụng fetch để thực hiện yêu cầu PUT
-            const response = await fetch('api/ticket/UpdateTicket', {
+            const response = await fetch('http://localhost:8000/api/ticket/updateTicket', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -95,7 +101,8 @@ const SuaVe = () => {
                 throw new Error(JSON.stringify(errorMessage));
             }
 
-            alert("Vé đã được cập nhật");
+            setShowSuccessMessage(true);
+            setTimeout(() => setShowSuccessMessage(false), 3000);
 
         } catch (err) {
             // Xử lý lỗi
@@ -105,6 +112,11 @@ const SuaVe = () => {
 
     return (
         <div className="container-fluid">
+             {showSuccessMessage && (
+                <div className="alert alert-success mt-3" role="alert">
+                    Sửa vé thành công!
+                </div>
+            )}
             <div className="logo-container">
                 <div className="logo-inner">
                     <img src={logo2} alt="Logo" className="logo-img" />
@@ -113,7 +125,7 @@ const SuaVe = () => {
             </div>
 
             <div className="head-name">
-                <h2>Thêm khách hàng</h2>
+                <h2>Sửa thông tin vé</h2>
             </div>
 
             <div className="infor-cn">
@@ -126,7 +138,7 @@ const SuaVe = () => {
                                 className="form-control"
                                 id="tId"
                                 placeholder="Mã vé"
-                                value={ticketInfo.maKhachHang}
+                                value={ticketInfo.tId}
                                 onChange={handleChange}
                                 readOnly
                             />
@@ -138,7 +150,7 @@ const SuaVe = () => {
                                 className="form-control"
                                 id="cccd"
                                 placeholder="Tên khách hàng"
-                                value={ticketInfo.maKhachHang}
+                                value={ticketInfo.cccd}
                                 onChange={handleChange}
                             />
                         </div>
@@ -149,7 +161,7 @@ const SuaVe = () => {
                                 className="form-control"
                                 id="name"
                                 placeholder="Tên khách hàng"
-                                value={ticketInfo.maKhachHang}
+                                value={ticketInfo.name}
                                 onChange={handleChange}
                             />
                         </div>
@@ -162,7 +174,7 @@ const SuaVe = () => {
                                 className="form-control"
                                 id="flyId"
                                 placeholder="Mã chuyến bay"
-                                value={ticketInfo.maKhachHang}
+                                value={ticketInfo.flyId}
                                 onChange={handleChange}
                             />
                         </div>
@@ -173,7 +185,7 @@ const SuaVe = () => {
                                 className="form-control"
                                 id="kgId"
                                 placeholder="Mã hành lý"
-                                value={ticketInfo.maKhachHang}
+                                value={ticketInfo.kgId}
                                 onChange={handleChange}
                             />
                         </div>
@@ -184,7 +196,7 @@ const SuaVe = () => {
                                 className="form-control"
                                 id="seatId"
                                 placeholder="Mã chỗ ngồi"
-                                value={ticketInfo.maKhachHang}
+                                value={ticketInfo.seatId}
                                 onChange={handleChange}
                             />
                         </div>
@@ -198,7 +210,7 @@ const SuaVe = () => {
                                 className="form-control"
                                 id="foodId"
                                 placeholder="Mã thức ăn"
-                                value={ticketInfo.maKhachHang}
+                                value={ticketInfo.foodId}
                                 onChange={handleChange}
                             />
                         </div>
@@ -209,7 +221,7 @@ const SuaVe = () => {
                                 className="form-control"
                                 id="ticketPrice"
                                 placeholder="Giá vé"
-                                value={ticketInfo.maKhachHang}
+                                value={ticketInfo.ticketPrice}
                                 onChange={handleChange}
                             />
                         </div>
@@ -222,7 +234,7 @@ const SuaVe = () => {
                                 className="form-control"
                                 id="mail"
                                 placeholder="Email"
-                                value={ticketInfo.maKhachHang}
+                                value={ticketInfo.mail}
                                 onChange={handleChange}
                             />
                         </div>
@@ -233,7 +245,7 @@ const SuaVe = () => {
                                 className="form-control"
                                 id="disId"
                                 placeholder="Mã khuyến mãi"
-                                value={ticketInfo.maKhachHang}
+                                value={ticketInfo.disId}
                                 onChange={handleChange}
                             />
                         </div>

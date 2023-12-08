@@ -7,6 +7,7 @@ const ThemDoAn = () => {
     const [fId, setFId] = useState("");
     const [fName, setFName] = useState("");
     const [fPrice, setFPrice] = useState("");
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
 
     const handleSave = async () => {
@@ -16,13 +17,13 @@ const ThemDoAn = () => {
         }
 
         const FoodData = {
-            fId: fId,
-            fName: fName,
-            fPrice: fPrice,
+            F_ID: fId,
+            F_NAME: fName,
+            F_PRICE: fPrice,
 
         };
         try {
-        const FoodResponse = await fetch("api/food/AddFood", {
+        const FoodResponse = await fetch("http://localhost:8000/api/food/addFood", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -35,8 +36,11 @@ const ThemDoAn = () => {
                 alert("Failed to add Food");
                 return;
             }
-
-            alert("Food added successfully");
+            setShowSuccessMessage(true);
+            setFId("");
+            setFName("");
+            setFPrice("");
+            setTimeout(() => setShowSuccessMessage(false), 3000);
         } catch (error) {
             console.error("Error:", error);
         }
@@ -50,6 +54,11 @@ const ThemDoAn = () => {
 
     return (
         <div className="container-fluid">
+            {showSuccessMessage && (
+                <div className="alert alert-success mt-3" role="alert">
+                    Thêm món ăn thành công!
+                </div>
+            )}
             <div className="logo-container">
                 <div className="logo-inner">
                     <img src={logo2} alt="Logo" className="logo-img" />

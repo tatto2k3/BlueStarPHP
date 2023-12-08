@@ -7,6 +7,8 @@ const ThemHanhLy = () => {
     const [luggageCode, setLuggageCode] = useState("");
     const [mass, setMass] = useState("");
     const [price, setPrice] = useState("");
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
 
 
     const handleSave = async () => {
@@ -16,12 +18,12 @@ const ThemHanhLy = () => {
         }
 
         const luggageData = {
-            luggageCode: luggageCode,
-            mass: mass,
-            price: price,
+            LUGGAGE_CODE: luggageCode,
+            MASS: mass,
+            PRICE: price,
         };
         try {
-        const luggageResponse = await fetch("api/luggage/AddLuggage", {
+        const luggageResponse = await fetch("http://localhost:8000/api/luggage/addLuggage", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -34,8 +36,11 @@ const ThemHanhLy = () => {
                 alert("Failed to add Luggage");
                 return;
             }
-
-            alert("Luggage added successfully");
+            setShowSuccessMessage(true);
+            setLuggageCode("");
+            setMass("");
+            setPrice("");
+            setTimeout(() => setShowSuccessMessage(false), 3000);
         } catch (error) {
             console.error("Error:", error);
         }
@@ -49,6 +54,11 @@ const ThemHanhLy = () => {
 
     return (
         <div className="container-fluid">
+            {showSuccessMessage && (
+                <div className="alert alert-success mt-3" role="alert">
+                    Thêm hành lý thành công!
+                </div>
+            )}
             <div className="logo-container">
                 <div className="logo-inner">
                     <img src={logo2} alt="Logo" className="logo-img" />
@@ -57,7 +67,7 @@ const ThemHanhLy = () => {
             </div>
 
             <div className="head-name">
-                <h2>Thêm khách hàng</h2>
+                <h2>Thêm hành lý</h2>
             </div>
 
             <div className="infor-cn">
@@ -91,7 +101,7 @@ const ThemHanhLy = () => {
                                 type="text"
                                 className="form-control"
                                 id="price"
-                                placeholder="price"
+                                placeholder="Giá tiền"
                                 value={price}
                                 onChange={(e) => setPrice(e.target.value)}
                             />

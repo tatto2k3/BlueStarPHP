@@ -8,6 +8,7 @@ const ThemMayBay = () => {
     const [typeofplane, setTypeofplane] = useState("");
     const [businessCapacity, setBusinessCapacity] = useState("");
     const [economyCapacity, setEconomyCapacity] = useState("");
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     const handleSave = async () => {
         if (!isValidData()) {
@@ -16,14 +17,14 @@ const ThemMayBay = () => {
         }
 
         const planeData = {
-            plId: plId,
-            typeofplane: typeofplane ,
-            businessCapacity: businessCapacity,
-            economyCapacity: economyCapacity,  
+            PL_ID: plId,
+            TYPEOFPLANE: typeofplane ,
+            BUSINESS_CAPACITY: businessCapacity,
+            ECONOMY_CAPACITY: economyCapacity,  
         };
         console.log(planeData);
         try {
-        const planeResponse = await fetch("api/plane/AddPlane", {
+        const planeResponse = await fetch("http://localhost:8000/api/plane/addPlane", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -37,8 +38,12 @@ const ThemMayBay = () => {
                 alert("Failed to add plane");
                 return;
             }
-            
-            alert("Plane added successfully");
+            setShowSuccessMessage(true);
+                setPlId("");
+                setTypeofplane("");
+                setBusinessCapacity("");
+                setEconomyCapacity("");
+                setTimeout(() => setShowSuccessMessage(false), 3000);
         } catch (error) {
             
             console.error("Error:", error);
@@ -53,6 +58,11 @@ const ThemMayBay = () => {
 
     return (
         <div className="container-fluid">
+            {showSuccessMessage && (
+                <div className="alert alert-success mt-3" role="alert">
+                    Thêm máy bay thành công!
+                </div>
+            )}
             <div className="logo-container">
                 <div className="logo-inner">
                     <img src={logo2} alt="Logo" className="logo-img" />

@@ -8,6 +8,7 @@ import axios from 'axios';
 const SuaSanBay = () => {
     const location = useLocation();
     const [selectedSanbayInfo, setSelectedSanbayInfo] = useState(location.state?.selectedSanbayInfo || []);
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
     useEffect(() => {
         console.log("Selected Sanbay info in SuaKhachHang useEffect:", selectedSanbayInfo);
@@ -24,7 +25,7 @@ const SuaSanBay = () => {
         if (selectedSanbayInfo.length > 0) {
             // Nếu có thông tin khách hàng được chọn, cập nhật SanbayInfo
             setSanbayInfo({
-                airportId: selectedSanbayInfo[0]?.airportId || '',
+                airportId: selectedSanbayInfo[0]?.airportID || '',
                 airportName: selectedSanbayInfo[0]?.airportName || '',
                 place: selectedSanbayInfo[0]?.place || '',
             });
@@ -53,19 +54,19 @@ const SuaSanBay = () => {
             }
 
             const updatedData = {
-                airportId: SanbayInfo.airportId,
+                airportID: SanbayInfo.airportId,
                 airportName: SanbayInfo.airportName,
                 place: SanbayInfo.place,
             };
 
 
-            if (!updatedData.airportId) {
+            if (!updatedData.airportID) {
                 alert("AirportId là bắt buộc");
                 return;
             }
 
             // Sử dụng fetch để thực hiện yêu cầu PUT
-            const response = await fetch('api/sanbay/UpdateSanbay', {
+            const response = await fetch('http://localhost:8000/api/sanbay/updateSanbay', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -79,7 +80,8 @@ const SuaSanBay = () => {
                 throw new Error(JSON.stringify(errorMessage));
             }
 
-            alert("Sân bay đã được cập nhật");
+            setShowSuccessMessage(true);
+            setTimeout(() => setShowSuccessMessage(false), 3000);
 
         } catch (err) {
             // Xử lý lỗi
@@ -88,6 +90,11 @@ const SuaSanBay = () => {
     };
     return (
         <div className="container-fluid">
+            {showSuccessMessage && (
+                <div className="alert alert-success mt-3" role="alert">
+                    Sửa sân bay thành công!
+                </div>
+            )}
             <div className="logo-container">
                 <div className="logo-inner">
                     <img src={logo2} alt="Logo" className="logo-img" />

@@ -11,6 +11,8 @@
 }
 .right-content {
     width: 100%;
+    height: 730px;
+    overflow:auto;
 }
     #sidebar-container {
         min-height: 100vh;

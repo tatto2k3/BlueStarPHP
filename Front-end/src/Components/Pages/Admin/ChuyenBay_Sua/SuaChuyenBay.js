@@ -1,59 +1,105 @@
-﻿import React, { useState } from "react";
+﻿import React, { useState, useEffect } from "react";
 import './SuaChuyenBay.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import logo2 from '../../../../assets/logo2.PNG';
+import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 const SuaChuyenBay = () => {
-    const [flyId, setflyId] = useState("");
-    const [plId, setPlId] = useState("");
-    const [fromLocation, setFromLocation] = useState("");
-    const [toLocation, setToLocation] = useState("");
-    const [departureTime, setDepartureTime] = useState("");
-    const [arrivalTime, setArrivalTime] = useState("");
-    const [departureDay, setDepartureDay] = useState("");
-    const [originalPrice, setOriginalPrice] = useState("");
+    const location = useLocation();
+    const [selectedChuyenbayInfo, setSelectedChuyenbayInfo] = useState(location.state?.selectedChuyenbayInfo || []);
 
-    const handleSave = async () => {
-        if (!isValidData()) {
-            alert("Invalid customer data");
-            return;
+    useEffect(() => {
+        console.log("Selected chuyenbay info in SuaKhachHang useEffect:", selectedChuyenbayInfo);
+        // Các thao tác khác với selectedchuyenbayInfo
+    }, [selectedChuyenbayInfo]);
+
+    const [chuyenbayInfo, setChuyenbayInfo] = useState({
+        flyId: '',
+        plId: '',
+        fromLocation: '',
+        toLocation: '',
+        departureTime: '',
+        arrivalTime: '',
+        departureDay: '',
+        originalPrice : 2
+    });
+
+    useEffect(() => {
+        if (selectedChuyenbayInfo.length > 0) {
+            // Nếu có thông tin khách hàng được chọn, cập nhật chuyenbayInfo
+            setChuyenbayInfo({
+                flyId: selectedChuyenbayInfo[0]?.flyId || '',
+                plId: selectedChuyenbayInfo[0]?.plId || '',
+                fromLocation: selectedChuyenbayInfo[0]?.fromLocation || '',
+                toLocation: selectedChuyenbayInfo[0]?.toLocation || '',
+                departureTime: selectedChuyenbayInfo[0]?.departureTime || '',
+                arrivalTime: selectedChuyenbayInfo[0]?.arrivalTime || '',
+                departureDay: selectedChuyenbayInfo[0]?.departureDay || '',
+                originalPrice: selectedChuyenbayInfo[0]?.originalPrice || 0
+            });
         }
+    }, [selectedChuyenbayInfo]);
 
-        const flightData = {
-            flyId: "C21",
-            plId: "32423467",
-            fromLocation: "ngo tat to",
-            toLocation: null,  
-            departureTime: "",
-            arrivalTime: "",
-            departureDay: "",
-            originalPrice: "",
-        };
-        try {
-        const flightResponse = await fetch("api/customer/AddFlight", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(flightData),
+
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+
+        setChuyenbayInfo({
+            ...chuyenbayInfo,
+            [id]: value,
         });
-            if (!flightResponse.ok) {
-                const flightError = await flightResponse.json();
-                console.error("Flight error:", flightError);
-                alert("Failed to add flight");
+    };
+
+
+    // Phía máy khách - SuaKhachHang.js
+    const handleSave = async function update(event) {
+        event.preventDefault();
+        try {
+
+            if (!chuyenbayInfo || !chuyenbayInfo.flyId) {
+                alert("Khách hàng không được tìm thấy");
                 return;
             }
 
-            alert("flight added successfully");
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
+            const updatedData = {
+                flyId: chuyenbayInfo.flyId,
+                plId: chuyenbayInfo.plId,
+                fromLocation: chuyenbayInfo.fromLocation,
+                toLocation: chuyenbayInfo.toLocation,
+                departureTime: chuyenbayInfo.departureTime,
+                arrivalTime: chuyenbayInfo.arrivalTime,
+                departureDay: chuyenbayInfo.departureDay,
+                originalPrice: chuyenbayInfo.originalPrice,
+            };
 
-    const isValidData = () => {
-        return (
-            flyId.trim() !== ""
-        );
+
+            if (!updatedData.flyId) {
+                alert("CId là bắt buộc");
+                return;
+            }
+
+            // Sử dụng fetch để thực hiện yêu cầu PUT
+            const response = await fetch('api/chuyenbay/UpdateChuyenbay', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedData),
+            });
+
+            if (!response.ok) {
+                // Xử lý lỗi
+                const errorMessage = await response.text();
+                throw new Error(JSON.stringify(errorMessage));
+            }
+
+            alert("Khách hàng đã được cập nhật");
+
+        } catch (err) {
+            // Xử lý lỗi
+            alert(err.message);
+        }
     };
 
     return (
@@ -79,8 +125,9 @@ const SuaChuyenBay = () => {
                                 className="form-control"
                                 id="maChuyenBay"
                                 placeholder="Mã chuyến bay"
-                                value={flyId}
-                                onChange={(e) => setPlId(e.target.value)}
+                                value={chuyenbayInfo.flyId}
+                                onChange={handleChange}
+                                readOnly
                             />
                         </div>
                         <div className="col-4">
@@ -90,8 +137,8 @@ const SuaChuyenBay = () => {
                                 className="form-control"
                                 id="maMayBay"
                                 placeholder="Mã máy bay"
-                                value={plId}
-                                onChange={(e) => setPlId(e.target.value)}
+                                value={chuyenbayInfo.plId}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="col-4">
@@ -101,8 +148,8 @@ const SuaChuyenBay = () => {
                                 className="form-control"
                                 id="fromLocation"
                                 placeholder="Điểm đi"
-                                value={fromLocation}
-                                onChange={(e) => setFromLocation(e.target.value)}
+                                value={chuyenbayInfo.fromLocation}
+                                onChange={handleChange}
                             />
                         </div>
                     </div>
@@ -114,8 +161,8 @@ const SuaChuyenBay = () => {
                                 className="form-control"
                                 id="toLocation"
                                 placeholder="Điểm đến"
-                                value={toLocation}
-                                onChange={(e) => setToLocation(e.target.value)}
+                                value={chuyenbayInfo.toLocation}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="col-4">
@@ -125,19 +172,19 @@ const SuaChuyenBay = () => {
                                 className="form-control"
                                 id="departureTime"
                                 placeholder="Giờ đi"
-                                value={departureTime}
-                                onChange={(e) => setDepartureTime(e.target.value)}
+                                value={chuyenbayInfo.departureTime}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="col-4">
                             <label htmlFor="arrivalTime" className="form-label">Giờ đến</label>
                             <input
-                                type="number"
+                                type="text"
                                 className="form-control"
                                 id="arrivalTime"
                                 placeholder="Giờ đến"
-                                value={arrivalTime}
-                                onChange={(e) => setArrivalTime(e.target.value)}
+                                value={chuyenbayInfo.arrivalTime}
+                                onChange={handleChange}
                             />
                         </div>
                     </div>
@@ -149,19 +196,19 @@ const SuaChuyenBay = () => {
                                 className="form-control"
                                 id="departureDay"
                                 placeholder="Ngày đi"
-                                value={departureDay}
-                                onChange={(e) => setDepartureDay(e.target.value)}
+                                value={chuyenbayInfo.departureDay}
+                                onChange={handleChange}
                             />
                         </div>
                         <div className="col-6">
                             <label htmlFor="originalPrice" className="form-label">Giá vé</label>
                             <input
-                                type="text"
+                                type="number"
                                 className="form-control"
                                 id="originalPrice"
                                 placeholder="Giờ đi"
-                                value={departureTime}
-                                onChange={(e) => setDepartureTime(e.target.value)}
+                                value={chuyenbayInfo.originalPrice}
+                                onChange={handleChange}
                             />
                         </div>
                         
@@ -172,7 +219,7 @@ const SuaChuyenBay = () => {
                 </form>
             </div>
             <div className="back">
-                <a href="./KhachHang" className="text-decoration-underline-mk">Quay lại trang dành cho khách hàng</a>
+                <a href="./ChuyenBay" className="text-decoration-underline-mk">Quay lại trang dành cho chuyến bay</a>
             </div>
         </div>
     );

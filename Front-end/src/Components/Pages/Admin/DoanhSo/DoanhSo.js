@@ -161,7 +161,6 @@ const DoanhSo = () => {
             className={`nav-link ${activeTab === "chiTiet" ? "active" : ""}`}
             id="chiTiet-tab"
             data-toggle="tab"
-            href="#chiTiet"
             role="tab"
             aria-controls="chiTiet"
             aria-selected={activeTab === "chiTiet"}

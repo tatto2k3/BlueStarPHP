@@ -1,7 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Sidebar.css';
 
-const Sidebar = ({children}) => { 
+const Sidebar = ({ children }) => { 
+    const [discountCount, setDiscountCount] = useState(0);
+
+    useEffect(() => {
+        // Thực hiện fetch dữ liệu từ API hoặc trạng thái ứng dụng của bạn
+        const fetchDiscountCount = async () => {
+            try {
+                const response = await fetch("api/discount/GetDiscountCount");
+                const data = await response.json();
+                setDiscountCount(data.Count); // Giả sử API trả về dữ liệu trong trường count
+            } catch (error) {
+                console.error("Error fetching discount count:", error);
+            }
+        };
+
+        fetchDiscountCount();
+    }, []);
     return (
         <div>
         <meta charSet="UTF-8" />
@@ -79,7 +95,7 @@ const Sidebar = ({children}) => {
             <a href="/MaGiamGia" data-toggle="sidebar-colapse" className="bg-transparent list-group-item list-group-item-action d-flex align-items-center">
               <div className="d-flex w-100 justify-content-start align-items-center">
                 <i className="bi bi-gift" />
-                <span id="collapse-text" className="menu-collapsed">Mã giảm giá <span className="badge badge-pill badge-dark ml-2">5</span> </span>
+                                <span id="collapse-text" className="menu-collapsed">Mã giảm giá <span className="badge badge-pill badge-dark ml-2">{discountCount}</span> </span>
               </div>
             </a>
             {/* Logo */}
