@@ -12,7 +12,7 @@ const FindUs = () => {
         
         <div className='wrapper_info'>
             <SubHeading title="Contact" />
-            <h1 className='headtext' style={{marginBottom: "3rem"}}>Cam kết</h1>
+            <h1 className='headtext' style={{marginBottom: "3rem"}}>Kết nối</h1>
 
             <div className='wrapper-content'>
                 <p>1515 NW 167th Street Suite 410 Miami, FL. 33169</p>

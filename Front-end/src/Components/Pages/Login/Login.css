@@ -59,3 +59,53 @@
     font-weight: 400;
     line-height: normal;
 }
+/* Thêm vào file CSS của bạn, có thể là Header.css */
+.navbar-avatar {
+    position: relative;
+    cursor: pointer;
+}
+
+    .navbar-avatar img {
+        width: 40px; /* Điều chỉnh kích thước ảnh avatar */
+        height: 40px;
+        border-radius: 50%; /* Làm tròn ảnh avatar */
+        margin-right: 10px; /* Khoảng cách giữa ảnh avatar và nút dropdown */
+    }
+
+.dropdown {
+    position: absolute;
+    top: 100%; /* Hiển thị dropdown dưới avatar */
+    right: 0;
+    background-color: #fff; /* Màu nền của dropdown */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Đổ bóng cho dropdown */
+    border-radius: 4px; /* Làm tròn góc dropdown */
+    z-index: 1; /* Đảm bảo hiển thị trên các thành phần khác */
+    display: none;
+    width: 200px;
+}
+
+    .dropdown ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .dropdown li {
+        padding: 10px;
+    }
+
+    .dropdown a {
+        text-decoration: none;
+        color: #333; /* Màu chữ của các mục dropdown */
+        display: block;
+        transition: background-color 0.3s;
+    }
+
+        .dropdown a:hover {
+            background-color: #f0f0f0; /* Màu nền khi hover */
+        }
+
+/* Hiển thị dropdown khi hover vào navbar-avatar */
+.navbar-avatar:hover .dropdown {
+    display: block;
+}

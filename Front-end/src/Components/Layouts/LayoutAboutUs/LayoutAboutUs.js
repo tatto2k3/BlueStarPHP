@@ -15,9 +15,7 @@ function LayoutAboutUs() {
       <HeaderReview />
       <Hero />
       <Testimonials />
-      <Services />
       <Ceo />
-      <Prevention />
       <FindUs />
       <Footer />
     </div>

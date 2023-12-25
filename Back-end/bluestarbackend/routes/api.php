@@ -7,9 +7,15 @@ use App\Http\Controllers\SanbayController;
 use App\Http\Controllers\LuggageController;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\ZaloController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\DoanhSoController;
+use App\Http\Controllers\FlightController;
+use App\Http\Controllers\OnlineCheckoutController;
+use App\Http\Controllers\SeatController;
+use App\Http\Controllers\PaymentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -38,6 +44,7 @@ Route::get('ticket/getTicketDetails', [TicketController::class, 'getTicketDetail
 Route::put('ticket/updateTicket', [TicketController::class, 'updateTicket']);
 Route::delete('ticket/deleteTicket/{cId}', [TicketController::class, 'deleteTicket']);
 Route::get('ticket/searchTickets', [TicketController::class, 'searchTickets']);
+Route::get('ticket/GetTicketReviewDetails', [TicketController::class, 'GetTicketReviewDetails']);
 
 Route::post('plane/addPlane',[PlaneController::class, 'addPlane']);
 Route::get('plane/getPlanes', [PlaneController::class, 'getPlanes']);
@@ -73,3 +80,34 @@ Route::get('discount/getDiscountDetails', [DiscountController::class, 'getDiscou
 Route::put('discount/updateDiscount', [DiscountController::class, 'updateDiscount']);
 Route::delete('discount/deleteDiscount/{cId}', [DiscountController::class, 'deleteDiscount']);
 Route::get('discount/searchDiscounts', [DiscountController::class, 'searchDiscounts']);
+Route::get('discount/getDiscountById', [DiscountController::class, 'getDiscountById']);
+
+Route::post('account/login', [AccountController::class, 'login']);
+Route::post('account/register', [AccountController::class, 'register']);
+Route::get('account/getAccountDetails', [AccountController::class, 'getAccountDetails']);
+Route::put('account/updateAccount', [AccountController::class, 'updateAccount']);
+Route::get('account/getPoints', [AccountController::class, 'getPoints']);
+
+Route::post('zalo/createOrderAsync', [ZaloController::class, 'createOrderAsync']);
+
+
+
+Route::get('flight/searchFlight', [FlightController::class, 'searchFlight']);
+Route::get('seat/getSeatByFlight', [SeatController::class, 'getSeatByFlight']);
+Route::get('flight/getFlights', [FlightController::class, 'getFlights']);
+Route::get('flight/getFlightDetails', [FlightController::class, 'getFlightDetails']);
+Route::delete('flight/deleteFlight/{cId}', [FlightController::class, 'deleteFlight']);
+
+
+Route::post('onlineCheckout/check_out', [OnlineCheckoutController::class, 'check_out']);
+
+
+Route::post('payment/handleCallback', [PaymentController::class, 'handleCallback']);
+
+
+Route::get('doanhso/GetDoanhSo', [DoanhSoController::class, 'GetDoanhSo']);
+Route::get('doanhso/GetDoanhThuNam', [DoanhSoController::class, 'GetDoanhThuNam']);
+Route::get('doanhso/GetDoanhThuThang', [DoanhSoController::class, 'GetDoanhThuThang']);
+Route::get('doanhso/GetDetails', [DoanhSoController::class, 'GetDetails']);
+
+Route::get('seat/getSeatByFlight', [SeatController::class, 'getSeatByFlight']);

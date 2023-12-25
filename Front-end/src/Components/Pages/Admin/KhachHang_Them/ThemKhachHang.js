@@ -102,7 +102,7 @@ const ThemKhachHang = () => {
                         <div className="col-4">
                             <label htmlFor="CCCD" className="form-label">CCCD</label>
                             <input
-                                type="text"
+                                type="number"
                                 className="form-control"
                                 id="CCCD"
                                 placeholder="CCCD"
@@ -115,7 +115,7 @@ const ThemKhachHang = () => {
                         <div className="col-6">
                             <label htmlFor="email" className="form-label">Email</label>
                             <input
-                                type="text"
+                                type="email"
                                 className="form-control"
                                 id="email"
                                 placeholder="Email"

@@ -113,6 +113,11 @@ class DiscountController extends Controller
         }
     }
 
+    public function getDiscountById(Request $request)
+    {
+         $result = Discount::where ('D_ID', '=', $request->input('discountID'))->get();
+         return ($result);
+    }
 
 
 }

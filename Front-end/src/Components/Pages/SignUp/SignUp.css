@@ -14,7 +14,7 @@
 .inforSignUp {
     background: #FFFFFF;
     position: absolute;
-    top: 94%;
+    top: 98%;
     left: 50%;
 }
 
@@ -56,4 +56,11 @@
     background-color: #0F5A90;
     color: #FFFFFF;
     border: 1px solid #0F5A90;
+}
+#btnLogin2 {
+    margin-top: 20px;
+}
+.btn-sub {
+    text-decoration: none;
+    
 }

@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import './Sidebar.css';
+import logo from '../../../../src/assets/logo2.PNG';
+import { useNavigate } from 'react-router-dom';
+import  { useAuth } from '../Header/AuthService';
 
 const Sidebar = ({ children }) => { 
     const [discountCount, setDiscountCount] = useState(0);
+    const { isLoggedIn, logout } = useAuth();
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        // Thực hiện fetch dữ liệu từ API hoặc trạng thái ứng dụng của bạn
-        const fetchDiscountCount = async () => {
-            try {
-                const response = await fetch("api/discount/GetDiscountCount");
-                const data = await response.json();
-                setDiscountCount(data.Count); // Giả sử API trả về dữ liệu trong trường count
-            } catch (error) {
-                console.error("Error fetching discount count:", error);
-            }
-        };
 
-        fetchDiscountCount();
-    }, []);
+    const handleExit = () => {
+        localStorage.removeItem('isLoggedIn');
+        // Clear the items from local storage
+        localStorage.removeItem('avatar');
+        localStorage.removeItem('email');
+
+        navigate("/");
+    }
+
     return (
         <div>
         <meta charSet="UTF-8" />
@@ -35,7 +36,7 @@ const Sidebar = ({ children }) => {
             <li className="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed">
               <div className="logo-container">
                 <div className="logo-inner">
-                  <img src="Logo.PNG" alt="Logo" className="logo-img" />
+                                    <img src={logo} alt="Logo" className="logo-img" />
                 </div>
                 <span className="Logo-name">Blue Star</span>
               </div>
@@ -99,11 +100,11 @@ const Sidebar = ({ children }) => {
               </div>
             </a>
             {/* Logo */}
-            <br />
-            <a href="#" data-toggle="sidebar-colapse" className="bg-transparent list-group-item list-group-item-action d-flex align-items-center">
+                        <br />
+                        <a onClick={handleExit} data-toggle="sidebar-colapse" className="bg-transparent list-group-item list-group-item-action d-flex align-items-center">
               <div className="d-flex w-100 justify-content-start align-items-center">
                 <i className="bi bi-box-arrow-right" />
-                <span id="collapse-text" className="menu-collapsed">Thoát </span>
+                <span id="collapse-text" className="menu-collapsed" onClick={logout}>Thoát </span>
               </div>
             </a>   
           </ul>{/* List Group END*/}

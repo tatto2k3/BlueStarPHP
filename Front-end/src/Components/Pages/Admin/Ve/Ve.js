@@ -87,6 +87,7 @@ const Ve = () => {
                         'Content-Type': 'application/json',
                     },
                 });
+               
 
                 if (response.status === 200) {
                     const updatedTickets = tickets.filter(ticket => !selectedTickets.includes(ticket.T_ID));
@@ -99,10 +100,11 @@ const Ve = () => {
                     toast.success('Tickets deleted successfully');
 
                 } else {
-                    toast.error('Failed to delete Tickets');
+                    alert("hello");
                 }
             } catch (error) {
                 toast.error('Error deleting Tickets: ' + error.message);
+               alert("Lỗi");
             }
         
     };

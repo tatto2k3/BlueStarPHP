@@ -1,7 +1,7 @@
 ﻿import * as React from 'react';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
-export default function RangeSlider({value,setValue,setMinPrice,setMaxPrice }) {
+export default function RangeSlider({ value, setValue, setMinPrice, setMaxPrice }) {
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -9,7 +9,7 @@ export default function RangeSlider({value,setValue,setMinPrice,setMaxPrice }) {
         setMaxPrice(newValue[1]);
         console.log(newValue);
     };
-   
+
     return (
         <Box >
             <Slider
@@ -18,8 +18,8 @@ export default function RangeSlider({value,setValue,setMinPrice,setMaxPrice }) {
                 valueLabelDisplay="auto"
                 min={20} // Giá trị tối thiểu
                 max={1000} // Giá trị tối đa
-                step={10}
-                default={[20,700] }
+                step={2}
+                default={[20, 700]}
             />
         </Box>
     );

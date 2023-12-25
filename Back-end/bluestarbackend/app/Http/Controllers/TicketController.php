@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Ticket;
+use Illuminate\Support\Carbon;
 
 class TicketController extends Controller
 {
@@ -40,6 +41,22 @@ class TicketController extends Controller
                 'Ticket_Price' => 'required',
                 'Mail' => 'required'
             ]);
+
+            $departureDate = Ticket::join('chuyenbay', 'ticket.Fly_ID', '=', 'chuyenbay.flyID')
+         ->where('T_ID', $request->input('T_ID'))
+         ->select('chuyenbay.departureDay')
+         ->first();
+
+     // Chuyển định dạng ngày từ chuỗi sang đối tượng Carbon để so sánh
+     $departureDate = Carbon::parse($departureDate->departureDay);
+
+     // Lấy ngày hiện tại
+     $currentDate = Carbon::now();
+
+     // So sánh ngày hiện tại với ngày chuyến bay
+     if ($currentDate->greaterThan($departureDate)) {
+         return response()->json(['error' => 'Khong the sua. Chuyen bay da hoan tat.'], 401);
+     }
 
             // Find the Ticket by cId
             $ticket = Ticket::where('T_ID', $request->input('T_ID'))->first();
@@ -81,25 +98,43 @@ class TicketController extends Controller
         return response()->json($TicketDetails);
     }
 
-    function deleteTicket($tId)
-    {
-        try {
-            // Tìm khách hàng dựa trên C_ID
-            $ticket = Ticket::where('T_ID', $tId)->first();
+    function deleteTicket($cId)
+{
+    try {
+        // Tìm khách hàng dựa trên C_ID
+        $ticket = Ticket::where('T_ID', $cId)->first();
 
-            if (!$ticket) {
-                return response()->json(['error' => 'Ticket not found'], 404);
-            }
-
-            // Xóa khách hàng
-            $ticket->delete();
-
-            return response()->json(['message' => 'Ticket deleted successfully'], 200);
-        } catch (\Exception $e) {
-            // Xử lý lỗi
-            return response()->json(['error' => $e->getMessage()], 500);
+        if (!$ticket) {
+            return response()->json(['error' => 'Ticket not found'], 404);
         }
-    }
+
+         // Lấy ngày chuyến bay từ cơ sở dữ liệu
+         $departureDate = Ticket::join('chuyenbay', 'ticket.Fly_ID', '=', 'chuyenbay.flyID')
+         ->where('T_ID', $cId)
+         ->select('chuyenbay.departureDay')
+         ->first();
+
+     // Chuyển định dạng ngày từ chuỗi sang đối tượng Carbon để so sánh
+     $departureDate = Carbon::parse($departureDate->departureDay);
+
+     // Lấy ngày hiện tại
+     $currentDate = Carbon::now();
+
+     // So sánh ngày hiện tại với ngày chuyến bay
+     if ($currentDate->greaterThan($departureDate)) {
+         return response()->json(['error' => 'Cannot delete. Departure date has passed.'], 400);
+     }
+
+     // Nếu ngày chuyến bay chưa đến, thực hiện xóa vé máy bay
+     $ticket->delete();
+
+     return response()->json(['message' => 'Ticket deleted successfully'], 200);
+ } catch (\Exception $e) {
+     // Xử lý lỗi
+     return response()->json(['error' => $e->getMessage()], 500);
+ }
+}
+
 
     function searchTickets(Request $request)
     {
@@ -120,6 +155,33 @@ class TicketController extends Controller
             return response()->json($searchResults);
         } catch (\Exception $ex) {
             return response()->json(['error' => 'Internal server error: ' . $ex->getMessage()], 500);
+        }
+    }
+
+    public function GetTicketReviewDetails(Request $request)
+    {
+        try {
+            $name = $request->query('name');
+
+            if (empty($name)) {
+                return response()->json(['error' => 'Year parameter is required.'], 400);
+            }
+
+            $result = Ticket::join('chuyenbay', 'ticket.Fly_ID', '=', 'chuyenbay.flyID')
+                ->whereRaw('Name = ?', [$name])
+                ->select('ticket.T_ID', 'ticket.CCCD', 'ticket.Name', 'ticket.Fly_ID', 'chuyenbay.departureDay','chuyenbay.departureTime','chuyenbay.arrivalTime','ticket.Seat_ID')
+                ->get();
+
+            $totalRevenue = $result->sum('Ticket_Price');
+
+            $details = Ticket::join('chuyenbay', 'ticket.Fly_ID', '=', 'chuyenbay.flyID')
+                ->whereRaw('Name = ?', [$name])
+                
+                ->get();
+
+            return response()->json($result);
+        } catch (\Exception $ex) {
+            return response()->json(['error' => 'Internal Server Error'], 500);
         }
     }
 

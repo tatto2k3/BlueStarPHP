@@ -51,6 +51,7 @@ import MaGiamGia from "./Components/Pages/Admin/MaGiamGia/MaGiamGia";
 import MaGiamGia_Them from "./Components/Pages/Admin/MaGiamGia_Them/ThemMaGiamGia";
 import MaGiamGia_Sua from "./Components/Pages/Admin/MaGiamGia_Sua/SuaMaGiamGia";
 import AdminLayout from "./Components/Layouts/AdminLayout/AdminLayout";
+import SeatReservation from "./Components/Pages/SeatReservation/SeatReservation";
 
 const AppRoutes = [
   
@@ -294,6 +295,11 @@ const AppRoutes = [
         path: '/MayBay_Sua',
         element: SuaMayBay,
         layout: AdminLayout
+    },
+    {
+        path: '/seatreservation',
+        element: SeatReservation,
+        layout: MainLayOut
     },
 
 ];

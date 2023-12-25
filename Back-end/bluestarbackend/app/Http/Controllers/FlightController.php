@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Flight;
+use DateTime;
 
 class FlightController extends Controller
 {
@@ -120,6 +121,47 @@ class FlightController extends Controller
             return response()->json(['error' => 'Internal server error: ' . $ex->getMessage()], 500);
         }
     }
+
+    public function searchFlight(Request $request)
+{
+    try {
+        $departureDay = null;
+
+        // Extract the day value and convert it to a string
+        $day = substr($request->input('departureDay'), 8, 2);
+        $month = substr($request->input('departureDay'), 5, 2);
+        $year = substr($request->input('departureDay'), 0, 4);
+
+        $departureDay = "{$year}-{$month}-{$day}";
+
+        $flightsQuery = Flight::where('fromLocation', $request->input('fromLocation'))
+            ->where('toLocation', $request->input('toLocation'))
+            ->where('departureDay', $departureDay);
+
+        if ($request->input('departureTime') !== null && $request->input('arrivalTime') !== null) {
+            $hourArrival = substr($request->input('arrivalTime'), 0, 2);
+            $hourDepart = substr($request->input('departureTime'), 0, 2);
+
+            $flightsQuery->where(function ($query) use ($hourDepart, $hourArrival) {
+                $query->whereRaw("CAST(SUBSTRING(departureTime, 1, 2) AS SIGNED) >= {$hourDepart}")
+                      ->whereRaw("CAST(SUBSTRING(departureTime, 1, 2) AS SIGNED) <= {$hourArrival}");
+            });
+        }
+
+        $flights = $flightsQuery->get();
+        $totalFlights = count($flights);
+
+        $result = [
+            'total_flight' => $totalFlights,
+            'flight' => $flights
+        ];
+
+        return response()->json($result);
+    } catch (\Exception $ex) {
+        return response()->json(['error' => 'Internal server error: ' . $ex->getMessage()], 500);
+    }
+}
+
 
 
 

@@ -11,7 +11,9 @@
 .col{
     display: flex;
 }
-
+.space {
+    height: 100px
+}
 /*css cho cái table */
 .pagination{
     margin-top: 10px;
@@ -31,5 +33,12 @@
     width: 100%;
     
   }
-  
-  
+#loaiDoanhSo {
+    width: 200px;
+}
+#nhapnam, #nhapthang {
+    padding-left: 50px;
+}
+#reportPDF{
+    font-size:13px;
+}

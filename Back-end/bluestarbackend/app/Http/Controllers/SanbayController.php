@@ -7,14 +7,7 @@ use App\Models\Sanbay;
 
 class SanbayController extends Controller
 {
-    function addSanbay(Request $request){
-        $Sanbay = new Sanbay;
-        $Sanbay->airportid = $request->input('airportID');
-        $Sanbay->airportname = $request->input('airportName');
-        $Sanbay->place = $request->input('place');
-        $Sanbay->save();
-        return $Sanbay;
-    }
+    
 
     function getSanbays()
     {
@@ -102,6 +95,35 @@ class SanbayController extends Controller
             return response()->json($searchResults);
         } catch (\Exception $ex) {
             return response()->json(['error' => 'Internal server error: ' . $ex->getMessage()], 500);
+        }
+    }
+    public function getAllAirport()
+    {
+        try {
+            $Sanbays = Sanbay::all();
+
+            if (empty($Sanbays)) {
+                return response()->json(['message' => 'Không có sân bay nào được tìm thấy'], 404);
+            }
+
+            return response()->json($Sanbays, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Internal server error: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function getAirportById($id)
+    {
+        try {
+            $airport = Sanbay::where('airportID', $id)->first();
+
+            if (!$airport) {
+                return response()->json(['message' => "Không tìm thấy sân bay với ID $id"], 404);
+            }
+
+            return response()->json($airport, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Internal server error: ' . $e->getMessage()], 500);
         }
     }
 

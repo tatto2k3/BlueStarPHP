@@ -146,7 +146,7 @@ const SuaVe = () => {
                         <div className="col-4">
                             <label htmlFor="cccd" className="form-label">CCCD</label>
                             <input
-                                type="text"
+                                type="number"
                                 className="form-control"
                                 id="cccd"
                                 placeholder="Tên khách hàng"
@@ -176,6 +176,8 @@ const SuaVe = () => {
                                 placeholder="Mã chuyến bay"
                                 value={ticketInfo.flyId}
                                 onChange={handleChange}
+                                readOnly
+                                
                             />
                         </div>
                         <div className="col-4">
@@ -217,7 +219,7 @@ const SuaVe = () => {
                         <div className="col-6">
                             <label htmlFor="ticketPrice" className="form-label">Giá vé</label>
                             <input
-                                type="text"
+                                type="number"
                                 className="form-control"
                                 id="ticketPrice"
                                 placeholder="Giá vé"
@@ -230,12 +232,13 @@ const SuaVe = () => {
                         <div className="col-6">
                             <label htmlFor="mail" className="form-label">Email</label>
                             <input
-                                type="text"
+                                type="email"
                                 className="form-control"
                                 id="mail"
                                 placeholder="Email"
                                 value={ticketInfo.mail}
                                 onChange={handleChange}
+                                readOnly
                             />
                         </div>
                         <div className="col-6">

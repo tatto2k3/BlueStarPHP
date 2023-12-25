@@ -32,7 +32,7 @@ const ChuyenBay = () => {
         // Lấy danh sách khách hàng từ API hoặc nguồn dữ liệu khác
         const fetchData = async () => {
             try {
-                const response = await fetch("/api/chuyenbay/GetChuyenbays");
+                const response = await fetch("http://localhost:8000/api/flight/getFlights");
                 const data = await response.json();
                 setChuyenbays(data);
             } catch (error) {
@@ -59,7 +59,7 @@ const ChuyenBay = () => {
     const handleShowInfo = async () => {
         try {
             if (selectedChuyenbays.length > 0) {
-                const response = await fetch(`/api/chuyenbay/GetChuyenbayDetails?flyIds=${selectedChuyenbays.join(',')}`);
+                const response = await fetch(`http://localhost:8000/api/flight/getFlightDetails?flyIds=${selectedChuyenbays.join(',')}`);
                 const data = await response.json();
 
                 // Chuyển hướng sang trang sửa khách hàng và truyền thông tin khách hàng
@@ -76,7 +76,7 @@ const ChuyenBay = () => {
         if (selectedChuyenbays.length > 0) {
             if (window.confirm("Are you sure to delete this chuyenbay")) {
                 try {
-                    const response = await axios.delete('http://localhost:44430/api/chuyenbay', {
+                    const response = await axios.delete('http://localhost:8000/api/flight', {
                         data: selectedChuyenbays, // Pass the array as data
                         headers: {
                             'Content-Type': 'application/json',
@@ -181,8 +181,8 @@ const ChuyenBay = () => {
                                         checked={selectedChuyenbays.includes(item.flyId)}
                                     />
                                 </td>
-                                <td>{item.flyId}</td>
-                                <td>{item.plId}</td>
+                                <td>{item.flyID}</td>
+                                <td>{item.Pl_ID}</td>
                                 <td>{item.fromLocation}</td>
                                 <td>{item.toLocation}</td>
                                 <td>{item.departureTime}</td>

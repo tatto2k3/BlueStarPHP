@@ -14,7 +14,13 @@ const context =  [
     "/api/luggage",
     "/api/account",
     "/api/food",
-    "/api/discount"
+    "/api/discount",
+    "/api/doanhthu",
+    "/api/airport",
+    "/api/flight",
+    "/api/zalo",
+    "/api/seat",
+    "/api/callback",
 ];
 
 module.exports = function(app) {

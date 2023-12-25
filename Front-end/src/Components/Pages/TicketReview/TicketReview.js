@@ -1,9 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './TicketReview.css'; 
-
+import { useLocation , useNavigate} from 'react-router-dom';
+import './TicketReview.css';
+import jsPDF from 'jspdf';
 
 const TicketReview = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [ticketReviewDetails, setTicketReviewDetails] = useState({
+        departureDay: '',
+        departureTime: '',
+        arrivalTime: '',
+        seatId: '',
+        flyId: '',
+        name: '',
+        cccd: ''
+    });
+
+    useEffect(() => {
+        const selectedCustomerInfo = location.state?.selectedCustomerInfo || [];
+
+        console.log("Selected customer info in useEffect:", selectedCustomerInfo[0].departureDay);
+
+        // Lắng nghe sự thay đổi của selectedCustomerInfo và cập nhật state
+            setTicketReviewDetails({
+                departureDay: selectedCustomerInfo[0].departureDay || '',
+                departureTime: selectedCustomerInfo[0].departureTime || '',
+                arrivalTime: selectedCustomerInfo[0].arrivalTime || '',
+                seatId: selectedCustomerInfo[0].Seat_ID || '',
+                flyId: selectedCustomerInfo[0].Fly_ID || '',
+                name: selectedCustomerInfo[0].Name || '',
+                cccd: selectedCustomerInfo[0].CCCD || ''
+            });
+        
+        console.log("setTicketReviewDetails:", ticketReviewDetails);
+    }, [location.state?.selectedCustomerInfo]);
+
+    const handleDownload = () => {
+       
+        navigate("/");
+    };
+
     return (
         <div className="container mt-4 containerHeight">
             <div className="row justify-content-center">
@@ -17,46 +54,96 @@ const TicketReview = () => {
                                 <div className="col-md-3 column-with-border">
                                     <div className="form-group">
                                         <label htmlFor="departureDate">Ngày khởi hành:</label>
-                                        <input type="text" className="form-control" id="departureDate" value="25/10/2023" readOnly />
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="departureDate"
+                                            value={ticketReviewDetails.departureDay}
+                                            readOnly
+                                        />
                                     </div>
                                     <div className="form-group row-with-border">
                                         <label htmlFor="fullName">Giờ khởi hành:</label>
-                                        <input type="text" className="form-control" id="departureTime" value="12:00 AM" readOnly />
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="departureTime"
+                                            value={ticketReviewDetails.departureTime}
+                                            readOnly
+                                        />
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="seatNumber">Mã chỗ ngồi:</label>
-                                        <input type="text" className="form-control" id="seatNumber" value="25A" readOnly />
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="seatNumber"
+                                            value={ticketReviewDetails.seatId}
+                                            readOnly
+                                        />
                                     </div>
                                 </div>
                                 <div className="col-md-3 column-with-border">
                                     <div className="form-group">
                                         <label htmlFor="arrivalDate">Ngày đến:</label>
-                                        <input type="text" className="form-control" id="arrivalDate" value="27/10/2023" readOnly />
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="arrivalDate"
+                                            value={ticketReviewDetails.departureDay}
+                                            readOnly
+                                        />
                                     </div>
                                     <div className="form-group row-with-border">
                                         <label htmlFor="cccd">Giờ đến:</label>
-                                        <input type="text" className="form-control" id="arrivalTime" value="12:00 PM" readOnly />
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="arrivalTime"
+                                            value={ticketReviewDetails.arrivalTime}
+                                            readOnly
+                                        />
                                     </div>
                                     <div className="form-group">
-                                        <label htmlFor="flightCode">Mã máy bay:</label>
-                                        <input type="text" className="form-control" id="flightCode" value="ABC123" readOnly />
+                                        <label htmlFor="flightCode">Mã chuyến bay:</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="flightCode"
+                                            value={ticketReviewDetails.flyId}
+                                            readOnly
+                                        />
                                     </div>
                                 </div>
                                 <div className="col-md-2">
-                                    <img src="/Images/Plane.png"  alt="" className="img-flight" />
+                                    <img src="/Images/Plane.png" alt="" className="img-flight" />
                                 </div>
                                 <div className="col-md-3">
                                     <div className="form-group">
-                                        <label htmlFor="departureTime">Họ và tên:</label>
-                                        <input type="text" className="form-control" id="fullName" value="Nguyễn Văn Suy" readOnly />
+                                        <label htmlFor="fullName">Họ và tên:</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="fullName"
+                                            value={ticketReviewDetails.name}
+                                            readOnly
+                                        />
                                     </div>
                                     <div className="form-group">
-                                        <label htmlFor="arrivalTime">CCCD:</label>
-                                        <input type="text" className="form-control" id="cccd" value="123456789" readOnly />
+                                        <label htmlFor="cccd">CCCD:</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="cccd"
+                                            value={ticketReviewDetails.cccd}
+                                            readOnly
+                                        />
                                     </div>
                                     <div className="button-card">
-                                        <button type="button" className="btn btn-outline-dark btn-block">Download</button>
-                                        <button type="button" className="btn btn-outline-primary btn-block">Share</button>
+
+                                        <button type="button" className="btn btn-outline-primary btn-block" onClick={handleDownload}>
+                                            Trang chủ
+                                        </button>
                                     </div>
                                 </div>
                             </div>
