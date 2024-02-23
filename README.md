@@ -4,20 +4,20 @@
 #### Relationship Model
 ![alt text](images/database.png)
 #### Use-case admin
-![alt text](images/use_case_full.png)
+![alt text](images/use_case_full.jpg)
 #### Use-case web
-![alt text](images/use_case_web.png)
+![alt text](images/use_case_web.jpg)
 #### Home Page
 ![alt text](images/homepage.png)
 ### Ticket Booking Process
 #### Step 1
-![alt text](images/step1.png)
+
 #### Step 2
-![alt text](images/step2.png)
+
 #### Step 3
-![alt text](images/step3.png)
+
 #### Step 4
-![alt text](images/step4.png)
+
 #### Step 5
 ![alt text](images/step5.png)
 #### Step 6
